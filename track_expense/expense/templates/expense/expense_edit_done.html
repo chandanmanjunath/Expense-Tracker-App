@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Expense{% endblock %}
+{% block content %}
+    <h1>Expense {{ form.expense_name }} Edit Completed</h1>
+    <p> <a href="{% url "dashboard" %}">Click here for Dashboard</a>.</p>
+{% endblock %}

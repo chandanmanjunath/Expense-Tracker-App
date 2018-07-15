@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Expense{% endblock %}
+{% block content %}
+    <h1>Expense {{ instance.expense_name }} got deleted successfully</h1>
+    <p> <a href="{% url "expense_list" %}">Click here Expense list</a>.</p>
+{% endblock %}

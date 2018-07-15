@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Expenses List{% endblock title %}
+
+{% block content %}
+
+<table>
+	<tr>
+      <th>Total Expense(In Rupees)</th>
+	</tr>
+	 <tr>
+	  <td>{% for key,value in expense_sum.items %}{{ value }}{% endfor %}</td>
+	 </tr>
+
+</table>
+<table id="expenseTable">
+    <tr class="header">
+	    <!-- calling functions on hit of a key-->
+	   <input type="text" id="expenseNameInput" onkeyup="searchExpenseNameFunction()" placeholder="Search For Expense Name" title="Type in a name"> 
+	   <div><p><button style='position:absolute;right:900px;top:127px' onclick="sortByExpenseName()">Sort By Expense Name</button></p></div>
+	   <th>Expense Name</th>
+	   <th>Expense Description</th>
+	   <input type="text" id="expensePriceInput" onkeyup="searchExpensePriceFunction()" placeholder="Search For Price" title="Type in a name2">
+	   <div><p><button style='position:absolute;right:900px;top:170px' onclick="sortByExpensePrice()">Sort By Expense price</button></p></div>
+       <th>Price(In Rupees)</th>
+	   <th>Expense Image</th>
+	   <input type="text" id="expenseDateInput" onkeyup="searchCreationDateFunction()" placeholder="Search For Creation Date" title="Type in a name3">
+	   <div><p><button style='position:absolute;right:900px;top:207px' onclick="sortByCreatedOn()">Sort By Created On</button></p></div>
+	   <th>Created On</th>
+	   <th>Edit</th>
+	   <th>Delete</th>
+	  
+    </tr>
+	<!--loop through django expense object for display-->
+	{% for obj in expense %}
+		<tr>
+			<td>{{obj.expense_name}}</td>
+			<td>{{obj.expense_description}}</td>
+			<td>{{obj.price}}</td>
+			<td><img src="{{obj.expense_image}}" /></td>
+			<td>{{obj.created}}</td>
+			<!--Display a message and trigger event-->
+			<td><a href="{% url "expense_edit" obj.id %}" onclick="return confirm('Are you sure to edit this expense?')">Edit</a></td>
+			<td><a href="{% url "expense_delete" obj.id %}" onclick="return confirm('Are you sure to Delete this expense?')">Delete</a></td>
+		</tr>
+	{% endfor %}
+</table>
+
+<script>
+<!--Below function is used to search Expense Name-->
+
+function searchExpenseNameFunction(){
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("expenseNameInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("expenseTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+<!--Below function is used to search Expense Price-->
+
+function searchExpensePriceFunction(){
+  var input, filter, table, tr, td, i;
+   input = document.getElementById("expensePriceInput");
+  filter = input.value;
+  table = document.getElementById("expenseTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+<!--Below function is used to search Creation Date-->
+
+function searchCreationDateFunction(){
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("expenseDateInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("expenseTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[4];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+<!--Below function is used to sort Expense Name-->
+
+function sortByExpenseName() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("expenseTable");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[0];
+      y = rows[i + 1].getElementsByTagName("TD")[0];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+<!--Below function is used to sort Expense Price-->
+
+function sortByExpensePrice() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("expenseTable");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+<!--Below function is used to sort Created On-->
+
+function sortByCreatedOn() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("expenseTable");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (x.innerHTML > y.innerHTML) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+</script>
+ {% endblock %}

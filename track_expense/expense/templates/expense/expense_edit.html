@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Edit an expense{% endblock %}
+{% block content %}
+    <h1>Edit an Expense</h1>
+    <p>Please edit your previous expense </p>
+    <form enctype="multipart/form-data" action="." method="post">
+      {{ form.as_p }}
+      {% csrf_token %}
+      <p><input type="submit" value="Edit Expense"></p>
+    </form>
+{% endblock %}
