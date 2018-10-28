@@ -39,7 +39,16 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'expense',
+	'rest_framework',
 )
+
+#setting the rest framework permissions
+REST_FRAMEWORK = {
+'DEFAULT_PERMISSION_CLASSES': [
+'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+]
+}
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -50,6 +50,7 @@
 <!--Below function is used to search Expense Name-->
 
 function searchExpenseNameFunction(){
+  debugger; 	
   var input, filter, table, tr, td, i;
   input = document.getElementById("expenseNameInput");
   filter = input.value.toUpperCase();
@@ -59,7 +60,7 @@ function searchExpenseNameFunction(){
     td = tr[i].getElementsByTagName("td")[0];
     if (td) {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
+        tr[i].style.display = "";//to show that particular row
       } else {
         tr[i].style.display = "none";
       }
